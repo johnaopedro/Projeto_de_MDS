@@ -165,4 +165,4 @@ def tables():
 
     return render_template('tables.html', data=table_data, search_query=search_query, sort_by=sort_by, sort_order=sort_order)
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
