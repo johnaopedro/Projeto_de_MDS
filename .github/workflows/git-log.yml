@@ -3,21 +3,21 @@ name: Git Log Automation
 on:
   push:
     branches:
-      - '*'  # Isso irá monitorar todos os commits em qualquer branch
+      - '*'  #Isso irá monitorar todos os commits em qualquer branch
   pull_request:
     branches:
-      - '*'  # Também captura os PRs para todas as branches
+      - '*'  #Também captura os PRs para todas as branches
 
 jobs:
   generate_log:
-    runs-on: ubuntu-latest  # Utiliza a última versão do Ubuntu
+    runs-on: ubuntu-latest  #Utiliza a última versão do Ubuntu
 
     steps:
     - name: Check out the repository
-      uses: actions/checkout@v2  # Faz checkout do código no repositório
+      uses: actions/checkout@v2  #Faz checkout do código no repositório
 
     - name: Fetch all branches
-      run: git fetch --all  # Certifica-se de que todas as branches locais e remotas estão disponíveis
+      run: git fetch --all  #Certifica-se de que todas as branches locais e remotas estão disponíveis
 
     - name: Generate Git Log for all branches
       run: |
@@ -27,10 +27,11 @@ jobs:
         git log --branches --pretty=format:"%h - %an, %ar : %s (%d)" > $LOG_FILE
 
     - name: Upload Git Log as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3  #Atualizado para a versão v3
       with:
-        name: git_log  # Nome do artifact
-        path: git_log_*.txt  # Caminho do arquivo gerado
+        name: git_log  #Nome do artifact
+        path: git_log_*.txt  #Caminho do arquivo gerado
+
 
 #Em git log --pretty=format:"%h - %an, %ar : %s (%d)" > $LOG_FILE (LINHA 24)
 #Significado:
