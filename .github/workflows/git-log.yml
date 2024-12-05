@@ -3,35 +3,39 @@ name: Git Log Automation
 on:
   push:
     branches:
-      - main  #Você pode mudar 'main' para outra branch se necessário
+      - '*'  # Isso irá monitorar todos os commits em qualquer branch
   pull_request:
     branches:
-      - main  #Também será acionado por PRs na branch 'main'
+      - '*'  # Também captura os PRs para todas as branches
 
 jobs:
   generate_log:
-    runs-on: ubuntu-latest  #Ambiente para rodar o job (Ubuntu mais recente)
+    runs-on: ubuntu-latest  # Utiliza a última versão do Ubuntu
 
     steps:
     - name: Check out the repository
-      uses: actions/checkout@v2  #Faz checkout do código no repositório
+      uses: actions/checkout@v2  # Faz checkout do código no repositório
 
-    - name: Generate Git Log
+    - name: Fetch all branches
+      run: git fetch --all  # Certifica-se de que todas as branches locais e remotas estão disponíveis
+
+    - name: Generate Git Log for all branches
       run: |
         # Cria um arquivo de log com a data e hora atual no nome
         LOG_FILE="git_log_$(date +"%Y-%m-%d_%H-%M-%S").txt"
-        # Gera o log incluindo o hash, autor, tempo relativo e a mensagem do commit
-        git log --pretty=format:"%h - %an, %ar : %s" > $LOG_FILE
+        # Gera o log de todas as branches, incluindo a branch de cada commit
+        git log --branches --pretty=format:"%h - %an, %ar : %s (%d)" > $LOG_FILE
 
     - name: Upload Git Log as artifact
       uses: actions/upload-artifact@v2
       with:
-        name: git_log  #Nome do artifact que será salvo
-        path: git_log_*.txt  #Caminho do arquivo de log gerado
+        name: git_log  # Nome do artifact
+        path: git_log_*.txt  # Caminho do arquivo gerado
 
-#Em git log --pretty=format:"%h - %an, %ar : %s" > $LOG_FILE (LINHA 24)
+#Em git log --pretty=format:"%h - %an, %ar : %s (%d)" > $LOG_FILE (LINHA 24)
 #Significado:
 #%h: Hash abreviado do commit.
 #%an: Nome do autor.
 #%ar: Tempo relativo (exemplo: "2 hours ago").
 #%s: Mensagem do commit.
+#(%d): Branch.
