@@ -1,11 +1,12 @@
-site_name: DOCUMENTAÇÃO - Análise de Gastos Públicos do Distrito Federal
+site_name: Análise de Gastos Públicos do Distrito Federal
 repo_url: https://github.com/unb-mds/Squad13
 
 extra_css:
   - style/style.css
 nav: 
-  - Home: index.md
-  - Como navegar: navegar/navegar.md
+  - Home: 
+    - Sobre: index.md
+    - Como navegar: navegar/navegar.md
   - Arquitetura : arquitetura/arquitetura.md
   - Atas:
     - Reuniões Semanais:
@@ -42,6 +43,14 @@ nav:
       - v0.1.0: prototipo-baixa-fidelidade/v0.1.0/v0.1.0.md
       - v0.1.1: prototipo-baixa-fidelidade/v0.1.1/v0.1.1.md
   - User Story: user_story/user_story.md
+  - Estudos:
+    - Releases: 
+      - Notes: estudos/releases/notes.md
+      - Tags: estudos/releases/tags.md
+      - Versionamento: estudos/releases/Versionamento.md
+    - Ambiente Virtual: estudos/Ambiente Virtual.md
+    - Scrum: estudos/Scrum.md
+    - XP (eXtreme Programming): estudos/XP(eXtreme Programming).md
 theme: 
   logo: style/logo.png
   name: material
@@ -65,5 +74,3 @@ theme:
         name: Trocar para modo claro
 icon:
   repo: fontawesome/brands/git-alt
-include: 
-  - README.md
