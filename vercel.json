@@ -1,15 +1,15 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "codigo/app.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/codigo/app.py"
-    }
-  ]
-}
+    "version": 2,
+    "builds": [
+      {
+        "src": "codigo/app.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/codigo/app.py"
+      }
+    ]
+  }
