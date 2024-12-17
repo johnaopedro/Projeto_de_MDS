@@ -1,0 +1,36 @@
+name: Deploy MkDocs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Quando houver alterações na branch 'main'
+    paths:
+      - 'docs/**'  # Somente quando houver mudanças na pasta 'docs'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # Ajuste a versão conforme necessário
+
+      - name: Install MkDocs and dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install mkdocs mkdocs-material  # Instala o MkDocs e o tema ou dependências necessárias
+
+      - name: Build the MkDocs site
+        run: mkdocs build --clean  # Gera os arquivos estáticos na pasta 'site'
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.1.0
+        with:
+          branch: gh-pages  # A branch onde o site será publicado
+          folder: site      # A pasta onde os arquivos gerados pelo MkDocs são armazenados
+          target-folder: ./ # Envia os arquivos diretamente para a raiz da branch 'gh-pages'
+          token: ${{ secrets.GITHUB_TOKEN }}  # Token de autenticação do GitHub Actions
