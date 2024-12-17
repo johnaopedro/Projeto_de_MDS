@@ -28,7 +28,7 @@ jobs:
         run: mkdocs build --clean  # Gera os arquivos estáticos na pasta 'site'
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4.1.0
+        uses: JamesIves/github-pages-deploy-action@v4  # Atualizando para a versão v4 mais recente
         with:
           branch: gh-pages  # A branch onde o site será publicado
           folder: site      # A pasta onde os arquivos gerados pelo MkDocs são armazenados
