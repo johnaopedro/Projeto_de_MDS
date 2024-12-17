@@ -9,26 +9,27 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Definindo a máquina de build
+    
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # Faz checkout do código no repositório
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v4  # Define a versão do Python
         with:
-          python-version: '3.9'  # Ajuste a versão conforme necessário
+          python-version: '3.9'  # Versão do Python (ajuste conforme necessário)
 
       - name: Install MkDocs and dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install mkdocs mkdocs-material  # Instala o MkDocs e o tema ou dependências necessárias
+          python -m pip install --upgrade pip  # Atualiza o pip
+          pip install mkdocs mkdocs-material  # Instala o MkDocs e o tema mkdocs-material
 
       - name: Build the MkDocs site
-        run: mkdocs build --clean  # Gera os arquivos estáticos na pasta 'site'
+        run: mkdocs build --clean  # Construa o site MkDocs (gera os arquivos estáticos na pasta 'site')
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4  # Atualizando para a versão v4 mais recente
+        uses: JamesIves/github-pages-deploy-action@v4  # Ação para deploy no GitHub Pages
         with:
           branch: gh-pages  # A branch onde o site será publicado
           folder: site      # A pasta onde os arquivos gerados pelo MkDocs são armazenados
