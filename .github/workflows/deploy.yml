@@ -1,37 +1,43 @@
-name: Deploy MkDocs to GitHub Pages
+name: Build and Deploy MkDocs
 
 on:
   push:
     branches:
       - main  # Quando houver alterações na branch 'main'
     paths:
-      - 'docs/**'  # Somente quando houver mudanças na pasta 'docs'
+      - 'docs/**'  # Quando houver mudanças na pasta 'docs'
+
+permissions:
+  contents: write  # Permissões necessárias para publicar no GitHub Pages
 
 jobs:
-  build:
-    runs-on: ubuntu-latest  # Definindo a máquina de build
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }}  # Evita múltiplos deploys simultâneos
+
+    runs-on: ubuntu-latest  # A máquina de build que será utilizada no GitHub Actions
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3  # Faz checkout do código no repositório
+      - name: Checkout repository 🛎️
+        uses: actions/checkout@v4  # Faz o checkout do código do repositório
 
-      - name: Set up Python
-        uses: actions/setup-python@v4  # Define a versão do Python
+      - name: Set up Python environment 🐍
+        uses: actions/setup-python@v4  # Configura o Python para o ambiente
         with:
-          python-version: '3.9'  # Versão do Python (ajuste conforme necessário)
+          python-version: '3.9'  # Defina a versão do Python desejada
 
-      - name: Install MkDocs and dependencies
+      - name: Install MkDocs and mkdocs-material 🧰
         run: |
           python -m pip install --upgrade pip  # Atualiza o pip
-          pip install mkdocs mkdocs-material  # Instala o MkDocs e o tema mkdocs-material
+          pip install mkdocs  # Instala o MkDocs
+          pip install mkdocs-material  # Instala o tema mkdocs-material
 
-      - name: Build the MkDocs site
-        run: mkdocs build --clean  # Construa o site MkDocs (gera os arquivos estáticos na pasta 'site')
+      - name: Build the MkDocs site 🏗️
+        run: mkdocs build --clean  # Gera os arquivos estáticos na pasta 'site'
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages 🚀
         uses: JamesIves/github-pages-deploy-action@v4  # Ação para deploy no GitHub Pages
         with:
           branch: gh-pages  # A branch onde o site será publicado
           folder: site      # A pasta onde os arquivos gerados pelo MkDocs são armazenados
-          target-folder: ./ # Envia os arquivos diretamente para a raiz da branch 'gh-pages'
+          target-folder: ./ # Envia os arquivos para a raiz da branch 'gh-pages'
           token: ${{ secrets.GITHUB_TOKEN }}  # Token de autenticação do GitHub Actions
