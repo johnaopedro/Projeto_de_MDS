@@ -3,7 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # A branch que será monitorada por mudanças
+      - main  # A branch da docs
+    paths:
+      - 'docs/**'  # Somente alterações na pasta "docs"
 
 jobs:
   deploy:
