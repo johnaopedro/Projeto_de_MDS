@@ -23,7 +23,7 @@ jobs:
           pip install mkdocs-material  # Se você usa o tema Material
       - name: Build MkDocs site
         run: |
-          mkdocs build --site-dir=../site  # Gera o site diretamente na raiz (../site)
+          mkdocs build --site-dir=site  # Gera o site diretamente na raiz (../site)
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
