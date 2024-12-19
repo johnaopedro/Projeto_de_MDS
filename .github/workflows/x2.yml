@@ -2,7 +2,7 @@ import requests
 import json
 
 # URL da API (insira aqui quando disponível)
-API_URL = ""
+API_URL = "https://jsonplaceholder.typicode.com/posts"  # Exemplo de URL de API pública
 
 # Nome do arquivo para salvar os dados
 OUTPUT_FILE = "data.json"
@@ -27,5 +27,5 @@ def fetch_and_save_data():
     except Exception as e:
         print(f"Erro ao processar os dados: {e}")
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     fetch_and_save_data()
