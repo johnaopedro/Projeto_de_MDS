@@ -4,7 +4,7 @@
 
 ## 📑 Descrição do Projeto
 
-Este projetfierfuioqergfrewijogfroirgfioergiorqejgihqewrgo consiste na criação de um site hospedado no GitHub Pages para a análise e visualização dos gastos públicos do Distrito Federal. O objetivo é proporcionar uma plataforma acessível que permita aos cidadãos, estudantes e profissionais entender e acompanhar a alocação de recursos públicos no DF, promovendo transparência e conscientização.
+Este projeto consiste na criação de um site hospedado no GitHub Pages para a análise e visualização dos gastos públicos do Distrito Federal. O objetivo é proporcionar uma plataforma acessível que permita aos cidadãos, estudantes e profissionais entender e acompanhar a alocação de recursos públicos no DF, promovendo transparência e conscientização.
 
 ## 📌 Objetivos
 
