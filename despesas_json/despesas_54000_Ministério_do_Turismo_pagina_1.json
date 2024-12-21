@@ -1,0 +1,22 @@
+[
+    {
+        "ano": 2024,
+        "orgao": "Fundo Geral de Turismo",
+        "codigoOrgao": "54901",
+        "orgaoSuperior": "Ministério do Turismo",
+        "codigoOrgaoSuperior": "54000",
+        "empenhado": "1.022.849.423,00",
+        "liquidado": "726.736.167,14",
+        "pago": "726.736.167,14"
+    },
+    {
+        "ano": 2024,
+        "orgao": "Ministério do Turismo - Unidades com vínculo direto",
+        "codigoOrgao": "54000",
+        "orgaoSuperior": "Ministério do Turismo",
+        "codigoOrgaoSuperior": "54000",
+        "empenhado": "1.127.097.477,49",
+        "liquidado": "282.343.666,78",
+        "pago": "275.851.345,22"
+    }
+]
