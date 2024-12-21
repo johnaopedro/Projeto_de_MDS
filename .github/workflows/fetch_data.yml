@@ -31,17 +31,20 @@ jobs:
       - name: Run Python script
         run: python fetch_data.py
 
-      # Passo 5: Mostrar o arquivo gerado (optional)
-      - name: Show generated file
-        run: cat data.json
+      # Passo 5: Mostrar os arquivos gerados (opcional)
+      - name: Show generated files
+        run: |
+          cat posts.json #JSON RELACIONADO AO ENDPOINT
+          cat comments.json #JSON RELACIONADO AO ENDPOINT
+          cat users.json #JSON RELACIONADO AO ENDPOINT
 
-      # Passo 6: Commit e Push do arquivo data.json
-      - name: Commit and push generated data.json
+      # Passo 6: Commit e Push dos arquivos gerados
+      - name: Commit and push generated JSON files
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add data.json
-          git commit -m "Add generated data.json"
+          git add posts.json comments.json users.json #ADICIONAR ARQUIVOS NO COMMIT
+          git commit -m "Add generated JSON files"
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
