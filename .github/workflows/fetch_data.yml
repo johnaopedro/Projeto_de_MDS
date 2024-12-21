@@ -34,3 +34,14 @@ jobs:
       # Passo 5: Mostrar o arquivo gerado (optional)
       - name: Show generated file
         run: cat data.json
+
+      # Passo 6: Commit e Push do arquivo data.json
+      - name: Commit and push generated data.json
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add data.json
+          git commit -m "Add generated data.json"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
