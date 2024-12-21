@@ -29,21 +29,22 @@ jobs:
 
       # Passo 4: Rodar o script Python
       - name: Run Python script
-        run: python fetch_data.py
+        run: python despesas_por_orgao.py
+        env:
+          API_KEY: ${{ secrets.API_KEY }}  # Usa o secret API_KEY do GitHub
+          API_COOKIE: ${{ secrets.API_COOKIE }}  # Referencia o secret do cookie
 
       # Passo 5: Mostrar os arquivos gerados (opcional)
       - name: Show generated files
         run: |
-          cat posts.json #JSON RELACIONADO AO ENDPOINT
-          cat comments.json #JSON RELACIONADO AO ENDPOINT
-          cat users.json #JSON RELACIONADO AO ENDPOINT
+          ls despesas_json/  # Lista todos os arquivos gerados na pasta 'despesas_json'
 
       # Passo 6: Commit e Push dos arquivos gerados
       - name: Commit and push generated JSON files
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add posts.json comments.json users.json #ADICIONAR ARQUIVOS NO COMMIT
+          git add despesas_json/*.json  # Adiciona todos os arquivos JSON gerados na pasta 'despesas_json'
           git commit -m "Add generated JSON files"
           git push origin main
         env:
