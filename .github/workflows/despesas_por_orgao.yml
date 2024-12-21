@@ -5,6 +5,8 @@ on:
     branches:
       - main
   workflow_dispatch:  # Permite acionar o workflow manualmente a partir da interface do GitHub
+  schedule:
+    - cron: '0 0 * * *'  # Executa a cada 24 horas, à meia-noite UTC
 
 jobs:
   fetch_and_save_data:
