@@ -11,15 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Passo 1: Checar o código
+      # Passo 1: Configura o repositório
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Passo 2: Configurar Python
+      # Passo 2: Configura o ambiente Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: "3.10"
 
       # Passo 3: Instalar dependências
       - name: Install dependencies
