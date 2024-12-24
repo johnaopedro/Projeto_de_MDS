@@ -5,9 +5,9 @@
         "codigoOrgao": "20101",
         "orgaoSuperior": "Presidência da República",
         "codigoOrgaoSuperior": "20000",
-        "empenhado": "1.977.273.125,74",
-        "liquidado": "1.492.575.392,48",
-        "pago": "1.445.109.452,47"
+        "empenhado": "1.989.768.039,95",
+        "liquidado": "1.537.632.238,33",
+        "pago": "1.445.466.578,47"
     },
     {
         "ano": 2024,
@@ -15,9 +15,9 @@
         "codigoOrgao": "20415",
         "orgaoSuperior": "Presidência da República",
         "codigoOrgaoSuperior": "20000",
-        "empenhado": "715.133.476,35",
-        "liquidado": "591.570.199,47",
-        "pago": "607.303.419,79"
+        "empenhado": "717.741.154,93",
+        "liquidado": "591.226.568,85",
+        "pago": "634.769.972,13"
     },
     {
         "ano": 2024,
@@ -26,8 +26,8 @@
         "orgaoSuperior": "Presidência da República",
         "codigoOrgaoSuperior": "20000",
         "empenhado": "62.046.716,38",
-        "liquidado": "40.266.724,38",
-        "pago": "40.049.440,55"
+        "liquidado": "40.307.505,88",
+        "pago": "40.076.893,25"
     },
     {
         "ano": 2024,
@@ -37,7 +37,7 @@
         "codigoOrgaoSuperior": "20000",
         "empenhado": "34.558.582,14",
         "liquidado": "28.438.916,90",
-        "pago": "28.102.578,90"
+        "pago": "28.293.715,98"
     },
     {
         "ano": 2024,
@@ -45,8 +45,8 @@
         "codigoOrgao": "60000",
         "orgaoSuperior": "Presidência da República",
         "codigoOrgaoSuperior": "20000",
-        "empenhado": "13.291.289,57",
-        "liquidado": "10.230.484,92",
-        "pago": "10.230.484,92"
+        "empenhado": "13.282.517,72",
+        "liquidado": "10.285.451,89",
+        "pago": "10.219.945,25"
     }
 ]
