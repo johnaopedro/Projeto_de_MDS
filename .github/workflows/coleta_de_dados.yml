@@ -1,4 +1,4 @@
-name: Roda API e Salva Json de Despesas
+name: Roda API e Salva Json
 
 on:
   push:
@@ -27,7 +27,9 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Python script
-        run: python actions/compras.py
+        run: |
+          python actions/compras.py
+          python actions/despesas_por_orgao.py
         env:
           API_KEY: ${{ secrets.API_KEY }}  # Usa o secret API_KEY do GitHub
           API_COOKIE: ${{ secrets.API_COOKIE }}  # Referencia o secret do cookie
