@@ -6,7 +6,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Caminho para os dados JSON
-DATA_DIR = "../actions/json"
+DATA_DIR = "./actions/json"
 
 # Função para carregar os dados de compras
 def carregar_dados_compras():
