@@ -1,14 +1,22 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, Response, request, send_file, jsonify
 import json
 import os
 from datetime import datetime
+from fpdf import FPDF
+import reportlab
+from io import BytesIO
+import matplotlib.pyplot as plt
+import base64
+from reportlab.lib.pagesizes import letter, landscape, A4
+from reportlab.platypus import SimpleDocTemplate, Image, Spacer, Paragraph, Table, TableStyle, KeepTogether
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.lib import colors
 
 app = Flask(__name__)
 
-# Caminho para os dados JSON
 DATA_DIR = "./actions/json"
 
-# Função para carregar os dados de compras
 def carregar_dados_compras():
     json_path = os.path.join(DATA_DIR, "compras.json")
     if os.path.exists(json_path):
@@ -16,7 +24,6 @@ def carregar_dados_compras():
             return json.load(file)
     return {}
 
-# Processar dados de compras para gráficos
 def processar_dados_compras():
     traducao_meses = {
         'January': 'Janeiro',
@@ -67,7 +74,6 @@ def processar_dados_compras():
         "pago": pago
     }
 
-# Processar dados de compras para tabelas
 def processar_dados_tabela_compras():
     dados_compras = carregar_dados_compras()
     compras_detalhadas = []
@@ -83,14 +89,12 @@ def processar_dados_tabela_compras():
             })
     return compras_detalhadas
 
-# Listar arquivos de despesas
 def listar_arquivos_despesas():
     return [
         f for f in os.listdir(DATA_DIR)
         if f.startswith("despesas_") and f.endswith(".json")
     ]
 
-# Processar dados de despesas por órgão para gráficos
 def processar_dados_despesas():
     despesas_por_orgao = {}
     arquivos = listar_arquivos_despesas()
@@ -108,7 +112,6 @@ def processar_dados_despesas():
             liquidado = []
             pago = []
 
-            # Calcula as médias de cada gasto, levando em conta todos os anos
             empenhado_media = sum(float(item["empenhado"].replace(".", "").replace(",", "."))
                                 for item in dados) / len(anos)
             liquidado_media = sum(float(item["liquidado"].replace(".", "").replace(",", "."))
@@ -116,12 +119,10 @@ def processar_dados_despesas():
             pago_media = sum(float(item["pago"].replace(".", "").replace(",", "."))
                            for item in dados) / len(anos)
 
-            # Lista para armazenar os anos válidos
             anos_validos = []
 
             for ano in anos:
 
-                # Soma os valores de cada gasto, levando em conta apenas o ano atual
                 empenhado_val = sum(float(item["empenhado"].replace(".", "").replace(",", "."))
                                   for item in dados if item["ano"] == ano)
                 liquidado_val = sum(float(item["liquidado"].replace(".", "").replace(",", "."))
@@ -129,7 +130,6 @@ def processar_dados_despesas():
                 pago_val = sum(float(item["pago"].replace(".", "").replace(",", "."))
                              for item in dados if item["ano"] == ano)
 
-                # Verifica se os valores são maiores que 0.05% de suas respectivas médias
                 if (empenhado_val >= empenhado_media * limite_minimo_percentual):
                     empenhado.append(empenhado_val)
 
@@ -142,7 +142,6 @@ def processar_dados_despesas():
                 anos_validos.append(str(ano))
 
 
-            # Atualiza os labels para usar apenas os anos válidos
             despesas_por_orgao[orgao] = {
                 "labels": anos_validos,
                 "empenhado": empenhado,
@@ -152,7 +151,6 @@ def processar_dados_despesas():
 
     return despesas_por_orgao
 
-# Carregar todas as despesas para tabelas
 def carregar_todas_despesas():
     arquivos = listar_arquivos_despesas()
     despesas_por_orgao = {}
@@ -165,7 +163,6 @@ def carregar_todas_despesas():
 
     return despesas_por_orgao or {}
 
-# Processar dados de despesas por órgão para tabelas
 def processar_dados_tabela_despesas(filename):
     json_path = os.path.join(DATA_DIR, filename)
     if os.path.exists(json_path):
@@ -187,31 +184,163 @@ def processar_dados_tabela_despesas(filename):
     return despesas_detalhadas
 
 @app.before_request
-def add_year_to_template():
-    # Adiciona o ano atual ao contexto global
+def adicionar_ano_contexto():
+
     from flask import g
     g.current_year = datetime.now().year
 
-# Rota inicial
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Rota para a página de gráficos
 @app.route('/charts')
 def charts():
-    compras = processar_dados_compras()  # Processa os dados de compras para gráficos
-    despesas_por_orgao = processar_dados_despesas()  # Processa os dados de despesas para gráficos
+    compras = processar_dados_compras()
+    despesas_por_orgao = processar_dados_despesas()
     return render_template('charts.html',
                            compras=compras,
                            despesas_por_orgao=despesas_por_orgao)
 
-# Rota para a página de tabelas
 @app.route('/tables')
 def tables():
     compras = processar_dados_tabela_compras()
     despesas_por_orgao = carregar_todas_despesas()
     return render_template('tables.html', compras=compras, despesas_por_orgao=despesas_por_orgao)
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/download-graficos', methods=['POST'])
+def download_graficos():
+    try:
+        data = request.get_json()
+        graficos = data.get('graficos', [])
+
+        buffer = BytesIO()
+
+        doc = SimpleDocTemplate(
+            buffer,
+            pagesize=landscape(letter),
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=72,
+            bottomMargin=72
+        )
+
+        elements = []
+
+        styles = getSampleStyleSheet()
+        title_style = ParagraphStyle(
+            'CustomTitle',
+            parent=styles['Heading1'],
+            fontSize=16,
+            spaceAfter=30,
+            alignment=1
+        )
+
+        subtitle_style = ParagraphStyle(
+            'CustomSubtitle',
+            parent=styles['Heading2'],
+            fontSize=14,
+            spaceAfter=20,
+            alignment=1
+        )
+
+        for grafico in graficos:
+            titulo = Paragraph(grafico['titulo'], subtitle_style)
+
+            img_data = grafico['imagem'].split(',')[1]
+
+            img_bytes = base64.b64decode(img_data)
+            img_buffer = BytesIO(img_bytes)
+
+            img = Image(img_buffer, width=9*inch, height=5*inch)
+
+            elementos_grafico = [
+                titulo,
+                img,
+                Spacer(1, 30)
+            ]
+
+            elements.append(KeepTogether(elementos_grafico))
+
+        doc.build(elements)
+
+        buffer.seek(0)
+
+        return send_file(
+            buffer,
+            mimetype='application/pdf',
+            as_attachment=True,
+            download_name='graficos_gastos_df.pdf'
+        )
+    except Exception as e:
+        return {"error": "Erro ao gerar PDF"}, 500
+
+@app.route('/download-tabelas', methods=['POST'])
+def download_tabelas():
+    try:
+        data = request.get_json()
+        tabelas = data.get('tabelas', [])
+
+        buffer = BytesIO()
+
+        doc = SimpleDocTemplate(buffer, pagesize=landscape(A4))
+        elements = []
+
+        styles = getSampleStyleSheet()
+        title_style = styles['Title']
+        normal_style = styles['BodyText']
+
+        elements.append(Paragraph("Monitoramento de Gastos Públicos - Tabelas", title_style))
+        elements.append(Spacer(1, 12))
+
+        page_width, _ = landscape(A4)
+        usable_width = page_width - doc.leftMargin - doc.rightMargin
+
+        for tabela in tabelas:
+            headers = tabela['headers']
+            rows = tabela['rows']
+
+            elements.append(Paragraph("Tabela de Dados", normal_style))
+            elements.append(Spacer(1, 12))
+
+            num_columns = len(headers)
+            col_width = usable_width / num_columns
+            col_widths = [col_width] * num_columns
+
+            data = [[Paragraph(str(cell), normal_style) for cell in row] for row in ([headers] + rows)]
+
+            table = Table(data, colWidths=col_widths, repeatRows=1)
+            table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LEFTPADDING', (0, 0), (-1, -1), 6),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+                ('TOPPADDING', (0, 0), (-1, -1), 6),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+                ('WORDWRAP', (0, 0), (-1, -1), 'LTR'),
+            ]))
+            elements.append(table)
+            elements.append(Spacer(1, 24))
+
+        doc.build(elements)
+        buffer.seek(0)
+
+        return send_file(
+            buffer,
+            mimetype='application/pdf',
+            as_attachment=True,
+            download_name='tabelas_gastos_publicos.pdf'
+        )
+    except Exception as e:
+        return {"error": "Erro ao gerar PDF"}, 500
 
 if __name__ == '__main__':
     app.run(debug=True)
