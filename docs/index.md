@@ -28,7 +28,7 @@ O projeto está sendo desenvolvido por um grupo de seis alunos da disciplina, co
 - **[Artur Mendonça](https://github.com/ArtyMend07)** - Desenvolvedor
 - **[Gabriel da Cunha](https://github.com/Nibaacriba)** - Product Owner
 - **[Gabriel Lopes](https://github.com/BrzGab)** - Desenvolvedor
-- **[João Pedro](https://github.com/johnaopedro)** - Desenvolvedor e estruturador da maioria das issues.
+- **[João Pedro](https://github.com/johnaopedro)** - Desenvolvedor
 - **[Julia Gabriela](https://github.com/JuliaGabP)** - Scrum Master
 - **[Lucas Mendonça](https://github.com/lucasarruda9)** - Desenvolvedor
 
@@ -44,9 +44,9 @@ O repositório está organizado da seguinte maneira:
 
 Comandos básicos necessários:
 
-Primeiro, use o comando `git clone https://github.com/unb-mds/Squad13` para conseguir clonar esse repositório em sua máquina.
+Primeiro, use o comando `git clone https://github.com/unb-mds/Gastos-DF-2024-02` para conseguir clonar esse repositório em sua máquina.
 
-Depois, use o comando `cd Squad13` para acessar o diretório principal do repositório.
+Depois, use o comando `cd Gastos-DF-2024-02` para acessar o diretório principal do repositório.
 
 Caso haja atualizações e já tenha clonado o repositório na máquina, será necessário utilizar o comando `git pull` no diretório principal para atualizar o repositório local.
 

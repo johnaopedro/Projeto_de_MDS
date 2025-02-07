@@ -63,11 +63,19 @@ h1 {
   padding: 0.5rem 0.75rem;
   border-radius: 0.25rem;
   font-size: 0.75rem;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-header:hover:not(.active) {
   background-color: #003d82;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-header:active {
+  transform: translateY(0);
 }
 
 .btn-header.active {
@@ -100,12 +108,24 @@ h1 {
   font-weight: bold;
   margin: 0 0.5rem;
   border-radius: 0.25rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
-.nav-link:hover {
-  background-color: #002d63;
-  transform: scale(1.03);
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+  width: 80%;
 }
 
 .nav-link.active {
@@ -127,11 +147,22 @@ main {
   background-color: white;
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   margin: 2rem auto;
   max-width: 62.5rem;
   overflow: hidden;
   color: #333;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.content:hover {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 #titulo-principal {
@@ -183,6 +214,12 @@ ol li {
   border-radius: 0.5rem;
   border: 0.0625rem solid #d1e3f8;
   margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.description-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .description-container p,
@@ -227,6 +264,13 @@ ol li {
 }
 
 /* Dropdown */
+
+.dropdown-content p {
+  margin: 5px 10px;
+  color: #0056b3;
+  font-weight: bold;
+}
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -238,30 +282,63 @@ ol li {
   color: white;
   border: none;
   padding: 0.4rem 0.6rem;
-  font-size: 0.75rem;
+  font-size: 1rem;
   border-radius: 0.25rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .dropdown-btn:hover {
   background-color: #003d82;
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 86, 179, 0.3);
 }
 
 .dropdown-content {
+  transform-origin: top;
+  transition:
+    transform 0.3s ease,
+    opacity 0.2s ease;
+  opacity: 0;
+  transform: scaleY(0);
   display: none;
   position: absolute;
   background-color: #f9f9f9;
   min-width: 8rem;
+  max-height: 300px; /* Altura máxima do dropdown */
+  overflow-y: auto; /* Adiciona barra de rolagem vertical quando necessário */
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 0.25rem;
   padding: 0.3rem 0;
+  scrollbar-width: thin; /* Para Firefox */
+  scrollbar-color: #0056b3 #f9f9f9; /* Para Firefox */
+}
+
+/* Estilização da barra de rolagem para navegadores WebKit (Chrome, Safari, etc) */
+.dropdown-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dropdown-content::-webkit-scrollbar-track {
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb {
+  background: #0056b3;
+  border-radius: 4px;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #003d82;
 }
 
 .dropdown-content.show {
-  display: block;
+  opacity: 1;
+  transform: scaleY(1);
 }
 
 .dropdown-content a {
@@ -271,6 +348,7 @@ ol li {
   display: block;
   transition: background-color 0.3s ease;
   font-size: 0.75rem;
+  display: block;
 }
 
 .dropdown-content a:hover {
@@ -278,31 +356,28 @@ ol li {
 }
 
 /* Filters and Search */
-.filters-container {
-  margin-bottom: 1.25rem;
+.filter-container {
+  margin-top: 1.25rem;
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 0.625rem;
   max-width: 25rem;
 }
 
-.filter-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.filter-group label {
+.filter-container label {
   font-size: 0.875rem;
   margin-bottom: 0.25rem;
   color: #333;
 }
 
-.filter-group select {
+.filter-container select {
   padding: 0.5rem;
   font-size: 0.875rem;
   border: 0.0625rem solid #ccc;
   border-radius: 0.3125rem;
   width: 100%;
+  max-width: 20rem;
 }
 
 .search-container {
@@ -310,7 +385,8 @@ ol li {
   display: flex;
   gap: 0.625rem;
   flex-wrap: wrap;
-  max-width: 18.75rem;
+  max-width: 20rem;
+  width: 100%;
 }
 
 .search-input {
@@ -320,6 +396,13 @@ ol li {
   border-radius: 0.3125rem;
   width: 100%;
   flex: 1;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
 }
 
 .search-button {
@@ -337,9 +420,16 @@ ol li {
 }
 
 /* Table */
+.scrollable-table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 1.25rem;
+}
+
 .data-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin-top: 1.25rem;
 }
 
@@ -369,6 +459,11 @@ ol li {
   border-bottom: 0.0625rem solid #ccc;
   text-align: left;
   padding-left: 0.9375rem;
+  transition: background-color 0.2s ease;
+}
+
+.data-table tr:hover td {
+  background-color: #f5f8fa;
 }
 
 .result-count {
@@ -415,14 +510,51 @@ footer p {
   font-size: 0.875rem;
 }
 
+/* Animação apenas para o container do gráfico */
 .chart-container {
-  width: 95%; /* Reduza a largura para garantir espaços iguais */
-  margin: 0 auto; /* Centraliza o gráfico horizontalmente */
+  width: 95%;
+  margin: 0 auto;
   background-color: #f3f7fa;
   border-radius: 0.62rem;
   margin-bottom: 1.25rem;
   padding: 0.62rem;
-  box-sizing: border-box; /* Garante que padding não afete a largura */
+  box-sizing: border-box;
+  position: relative;
+  overflow: visible !important;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Removendo as animações que interferem com o Plotly */
+.js-plotly-plot .plotly .hoverlayer {
+  position: absolute !important;
+}
+
+/* Animação para o texto explicativo */
+.texto-explicativo {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.6s ease-out forwards;
+  animation-delay: 0.3s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsividade */
@@ -468,9 +600,21 @@ footer p {
 }
 
 @media (max-width: 480px) {
+  .dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  header {
+    height: fit-content;
+  }
+
   #header-container {
     display: flex;
-    flex-wrap: nowrap;
+    flex-direction: column;
     justify-content: space-between;
 
     text-align: center;
@@ -549,5 +693,50 @@ footer p {
 
   .chart-description {
     font-size: 0.7rem;
+  }
+}
+
+.botao-anomalia {
+  margin: 10px 0;
+  padding: 8px 15px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.botao-anomalia:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.botao-anomalia:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .botao-anomalia {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+
+.texto-explicativo {
+  font-size: 20px;
+  color: #555;
+  margin-bottom: 10px;
+  text-align: center;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .texto-explicativo {
+    font-size: 12px;
   }
 }

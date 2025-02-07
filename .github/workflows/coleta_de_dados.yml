@@ -1,9 +1,9 @@
 name: Roda API e Salva Json
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # Executa o workflow uma vez por dia, às 00:00 UTC
-  workflow_dispatch:  # Permite disparar manualmente o workflow se necessário
+    - cron: '0 0 * * *'
 
 jobs:
   fetch_and_save_data:
@@ -27,34 +27,20 @@ jobs:
         run: |
           python actions/compras.py
           python actions/despesas_por_orgao.py
-          python actions/bolsafamilia.py
         env:
           API_KEY: ${{ secrets.API_KEY }}  # Usa o secret API_KEY do GitHub
           API_COOKIE: ${{ secrets.API_COOKIE }}  # Referencia o secret do cookie
 
       - name: Show generated files
         run: |
-          ls actions/json/  # Lista todos os arquivos gerados ou atualizados na pasta 'actions/json'
+          ls actions/json/  # Lista todos os arquivos gerados na pasta 'json'
 
-      - name: Check for changes in JSON files
-        id: check_changes
-        run: |
-          # Verifica se houve alguma modificação nos arquivos JSON na pasta 'actions/json/'
-          if git diff --exit-code actions/json/*.json; then
-            echo "No changes in JSON files. Skipping commit."
-            echo "::set-output name=files_changed::false"
-          else
-            echo "Changes detected in JSON files. Proceeding with commit."
-            echo "::set-output name=files_changed::true"
-          fi
-
-      - name: Commit and push generated/updated JSON files
-        if: steps.check_changes.outputs.files_changed == 'true'  # Só faz o commit se houver alterações nos arquivos JSON
+      - name: Commit and push generated JSON files
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add actions/json/*.json  # Adiciona todos os arquivos JSON gerados ou atualizados na pasta 'actions/json'
-          git commit -m "Update generated JSON files"
+          git add actions/json/*.json  # Adiciona todos os arquivos JSON gerados na pasta 'actions/json'
+          git commit -m "Add generated JSON files"
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
