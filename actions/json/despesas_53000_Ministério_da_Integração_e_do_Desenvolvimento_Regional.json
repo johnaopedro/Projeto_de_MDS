@@ -3748,5 +3748,15 @@
         "empenhado": "19.523.417,09",
         "liquidado": "8.912.935,96",
         "pago": "8.911.447,39"
+    },
+    {
+        "ano": 2025,
+        "orgao": "Agência Nacional de Águas e Saneamento Básico",
+        "codigoOrgao": "44205",
+        "orgaoSuperior": "Ministério da Integração e do Desenvolvimento Regional",
+        "codigoOrgaoSuperior": "53000",
+        "empenhado": "166.255.345,54",
+        "liquidado": "47.453.494,13",
+        "pago": "43.138.364,58"
     }
 ]
